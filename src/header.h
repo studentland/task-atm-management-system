@@ -39,3 +39,5 @@ void createNewAcc(struct User u);
 void mainMenu(struct User u);
 void checkAllAccounts(struct User u);
 
+void removeExistingAccount(struct User u);
+
