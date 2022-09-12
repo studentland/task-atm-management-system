@@ -103,8 +103,9 @@ void createNewAcc(struct User u)
     char userName[50];
     FILE *pf = fopen(RECORDS, "a+");
 
+int freshRun = 1; // to fix appearing account report on screen
 noAccount:
-    system("clear");
+    if (freshRun) { system("clear"); freshRun = 0; }
     printf("\t\t\t===== New record =====\n");
 
     printf("\nEnter today's date(mm/dd/yyyy):");
@@ -116,6 +117,9 @@ noAccount:
     {
         if (strcmp(userName, u.name) == 0 && cr.accountNbr == r.accountNbr)
         {
+            if (!freshRun) {
+                system("clear");
+            }
             printf("✖ This Account already exists for this user\n\n");
             goto noAccount;
         }
