@@ -231,7 +231,7 @@ void removeExistingAccount(struct User u){
         {
             // printf("acnum %d r.accountNbr %d strnum %d\n", acnum, r.accountNbr, strnum);
             printf("_____________________\n");
-            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n",
+            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n\n",
                    r.accountNbr,
                    r.deposit.day,
                    r.deposit.month,
@@ -241,6 +241,7 @@ void removeExistingAccount(struct User u){
                    r.amount,
                    r.accountType);
             acfound = 1;
+            break;
         }
     }
     fclose(pf);
