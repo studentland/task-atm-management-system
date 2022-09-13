@@ -53,3 +53,5 @@ dkms.conf
 
 # executable "atm"
 atm
+users.txt
+records.txt
