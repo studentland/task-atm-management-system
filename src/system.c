@@ -247,6 +247,170 @@ void removeExistingAccount(struct User u){
     success(u);
 }
 
+// update account implementation
+
+// update account
+
+// update country
+void updateCountry(struct Record *r){
+    againNewCountry:
+    printf("\t\t\t\n\n\nEnter new country: ");
+    char newcountry[100];
+    scanf("%s",newcountry);
+    printf("\nbefore updateCountry newcountry %s", newcountry);
+    printf("\nbefore updateCountry r.country %s", r->country);
+    if (strcmp(newcountry, "") == 0 || newcountry[0] == ' '){
+        system("clear");
+        printf("\nEmpty country and space at beginning are not allowed");
+        goto againNewCountry;
+    }else{
+        strcpy(r->country, newcountry);
+    }
+    printf("\nafter updateCountry r.country %s", r->country);
+}
+
+// update phone
+void updatePhone(struct Record *r){
+    printf("Enter new phone number: ");
+    int newphone = 0;
+    scanf("%d", &newphone);
+    printf("\n+++++++++after scanf %d", newphone);
+    if (newphone){
+        r->phone = newphone;
+    }
+}
+
+// menu for update account data
+void updateRecordDataAndMenu(struct Record *r){
+    int option = 0;
+    system("clear");
+    printf("\t\t====== %s update account %d =====\n\n[0] nothing\n\n[1] country\n\n[2] phone number\n\n",
+     r->name,
+     r->accountNbr);
+    scanf("%d",&option);
+    if (option < 0 && option > 2){
+        updateRecordDataAndMenu(r);
+    }else{
+        switch (option)
+        {
+        case 1:
+            updateCountry(r);
+            break;
+        case 2:
+            updatePhone(r);
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+void updateLine(FILE *src, FILE *temp, const int line, struct Record *r, struct User u){
+    printf("\n------r.name is %s", u.name);
+    
+    char buffer[BUFFER_SIZE];
+    int count = 1;
+    while ((fgets(buffer, BUFFER_SIZE, src)) != NULL){
+        if (line != count){
+            fputs(buffer, temp);
+        }else{
+            char* sline;
+            asprintf(&sline, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n",
+            r->id,
+	    r->userId,
+	    u.name, // dot because passed by value but not by reference
+            r->accountNbr,
+            r->deposit.month,
+            r->deposit.day,
+            r->deposit.year,
+            r->country,
+            r->phone,
+            r->amount,
+            r->accountType);
+            fputs(sline, temp);
+        }
+        count++;
+    }
+}
+
+// "const int line" is line number in file where account data placed
+void updateAccount(const int line, struct Record r, struct User u){
+   FILE *src;
+   FILE *temp;
+   char ch;
+   src = fopen(RECORDS, "r");
+   temp = fopen(TEMPRECORDS, "w");
+   if (src == NULL || temp == NULL){
+      printf("Unable to open file.\n");
+      exit(EXIT_FAILURE);
+   }
+   
+   // Move src file pointer to beginning
+   rewind(src);
+   // Update given line inside file.
+   updateLine(src, temp, line, &r, u);
+   /* Close all open files */
+   fclose(src);
+   fclose(temp);
+   /* Delete src file and rename temp file as src */
+   remove(RECORDS);
+   rename(TEMPRECORDS, RECORDS);
+}
+
+// update existing account upper level function
+void updateExistingAccount(struct User u){
+    int acnum = 0;
+    int strnum = 0;
+    int acfound = 0;
+    char userName[100];
+    struct Record r;
+
+    FILE *pf = fopen(RECORDS, "r");
+
+    system("clear");
+    printf("\t\t====== %s, enter your account number to update =====\n\n", u.name);
+    scanf("%d",&acnum);
+
+
+    while (getAccountFromFile(pf, userName, &r))
+    {
+        strnum++;
+        if (strcmp(userName, u.name) == 0 && r.accountNbr == acnum)
+        {
+            // printf("acnum %d r.accountNbr %d strnum %d\n", acnum, r.accountNbr, strnum);
+            printf("_____________________\n");
+            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n\n",
+                   r.accountNbr,
+                   r.deposit.day,
+                   r.deposit.month,
+                   r.deposit.year,
+                   r.country,
+                   r.phone,
+                   r.amount,
+                   r.accountType);
+            acfound = 1;
+            break;
+        }
+    }
+    fclose(pf);
+    if (acfound){
+        int rp = r.phone;
+        char rc[100];
+        strcpy(rc, r.country);
+
+        updateRecordDataAndMenu(&r);
+        printf("\nbefore phone %d , country %s", rp, rc);
+        printf("\nafter phone %d , country %s", r.phone, r.country);
+
+        updateAccount(strnum*2-1, r, u); // to update account data
+        printf("\nAccount number %d was updated!\n", acnum);
+    }else{
+        printf("\nAccount number %d was not found!\n", acnum);
+    }
+    success(u);
+}
+
 
 
 // https://www.tutorialspoint.com/c-program-to-remove-a-line-from-the-file#
