@@ -82,6 +82,23 @@ int isUserNameUnique(char a[50]){
     return 1; // the name is unique and can be used
 }
 
+// (no need to)generate unique index/id for new user
+int newUserIndex(){
+    return 11; // no need unique index, because the user name is unique(the task requirements).
+}
+
+// write the new user data
+void saveUserToFile(char a[50], char pass[50])
+{
+    FILE *ptr = fopen(USERS, "a+");
+    fprintf(ptr, "%d %s %s\n",
+            newUserIndex(),
+            a,
+            pass);
+    printf("user \"%s\" was added\n\n", a);
+}
+
+
 // register new user menu
 void registerMenu(char a[50], char pass[50])
 {
@@ -135,6 +152,6 @@ registerAgain:
     }
 
     // new user data is ok, write to database
-
+    saveUserToFile(a, pass);
 
 };

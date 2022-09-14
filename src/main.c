@@ -85,7 +85,7 @@ void initMenu(struct User *u)
             // student TODO : add your **Registration** function
             // here
             registerMenu(u->name, u->password);
-            initMenu(u);
+            exit(1);
             break;
         case 3:
             exit(1);
