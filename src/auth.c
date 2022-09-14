@@ -71,24 +71,16 @@ const char *getPassword(struct User u)
 // register new user implementation
 
 int isUserNameUnique(char a[50]){
-    // printf("inside getpasswordcode");
     FILE *fp;
     struct User userChecker;
-    // printf("before if fp open auth.c line 42\n");
     if ((fp = fopen(USERS, "r")) == NULL)
     {
         printf("Error! opening file");
         exit(1);
     }
-    // printf("before while fscanf auth.c line 47\n");
+    
     while (fscanf(fp, "%i %s %s", &userChecker.id, userChecker.name, userChecker.password) != EOF)
     {
-        // printf("before strcomp auth.c line 50\n");
-        // printf("\nuserChecker.name ");
-        // printf("%s",userChecker.name);
-        // printf("\nuserChecker.password ");
-        // printf("%s",userChecker.password);
-        // printf("\n");
         if (strcmp(userChecker.name, a) == 0)
         {
             fclose(fp);
