@@ -180,7 +180,6 @@ void removeExistingAccount(struct User u);
 const char *TEMPRECORDS = "./data/temprecords.tmp";
 // "const int line" is line number in file where account data placed
 void removeAccount(const int line){
-   // printf("%d account will be removed", line);
    FILE *src;
    FILE *temp;
    char ch;
@@ -190,8 +189,6 @@ void removeAccount(const int line){
       printf("Unable to open file.\n");
       exit(EXIT_FAILURE);
    }
-   // printf("\nFile contents before removing line.\n\n");
-   // printFile(src);
    
    // Move src file pointer to beginning
    rewind(src);
@@ -203,11 +200,6 @@ void removeAccount(const int line){
    /* Delete src file and rename temp file as src */
    remove(RECORDS);
    rename(TEMPRECORDS, RECORDS);
-   // printf("\n\n\nFile contents after removing %d line.\n\n", line);
-   // Open source file and print its contents
-//    src = fopen(RECORDS, "r");
-//    printFile(src);
-//    fclose(src);
 }
 
 void removeExistingAccount(struct User u){
@@ -254,6 +246,8 @@ void removeExistingAccount(struct User u){
     }
     success(u);
 }
+
+
 
 // https://www.tutorialspoint.com/c-program-to-remove-a-line-from-the-file#
 
