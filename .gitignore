@@ -55,3 +55,4 @@ dkms.conf
 atm
 data/users.txt
 data/records.txt
+.DS_Store
