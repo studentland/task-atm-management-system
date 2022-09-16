@@ -41,3 +41,4 @@ void checkAllAccounts(struct User u);
 
 void removeExistingAccount(struct User u);
 void updateExistingAccount(struct User u);
+void checkExistingAccount(struct User u);

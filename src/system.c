@@ -1,4 +1,5 @@
 #include "header.h"
+#include <stdio.h>
 
 const char *RECORDS = "./data/records.txt";
 
@@ -170,12 +171,55 @@ void checkAllAccounts(struct User u)
 
 
 // code injections
+
+// check existing accounts implementation
+
+void checkExistingAccount(struct User u)
+{
+    char userName[100];
+    struct Record r;
+    int acnum;
+
+    FILE *pf = fopen(RECORDS, "r");
+checkMenu:
+    system("clear");
+    
+    printf("%s enter your account number to check:", u.name);
+    scanf("%d", &acnum);
+    int acfound = 0;
+    printf("\t\t====== Account number %d from user, %s =====\n\n", acnum, u.name);
+    while (getAccountFromFile(pf, userName, &r))
+    {
+        if (strcmp(userName, u.name) == 0 && r.accountNbr == acnum)
+        {
+            printf("_____________________\n");
+            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n",
+                   r.accountNbr,
+                   r.deposit.day,
+                   r.deposit.month,
+                   r.deposit.year,
+                   r.country,
+                   r.phone,
+                   r.amount,
+                   r.accountType);
+                   acfound = 1;
+        }
+    }
+    if (!acfound) {
+    printf("\n\n%s account number %d not found!", u.name, r.accountNbr);
+    }
+    fclose(pf);
+    success(u);
+}
+
+// remove existing accounts implementation
+
 #define BUFFER_SIZE 1000
 void deleteLine(FILE *src, FILE *temp, const int line);
 void printFile(FILE *fptr);
 int findLineNumberToRemove(struct User u);
 void removeAccount(const int line);
-void removeExistingAccount(struct User u);
+//void removeExistingAccount(struct User u);
 
 const char *TEMPRECORDS = "./data/temprecords.tmp";
 // "const int line" is line number in file where account data placed
@@ -400,8 +444,8 @@ void updateExistingAccount(struct User u){
         strcpy(rc, r.country);
 
         updateRecordDataAndMenu(&r);
-        printf("\nbefore phone %d , country %s", rp, rc);
-        printf("\nafter phone %d , country %s", r.phone, r.country);
+        printf("\nold data: phone %d , country %s", rp, rc);
+        printf("\nnew data: phone %d , country %s", r.phone, r.country);
 
         updateAccount(strnum*2-1, r, u); // to update account data
         printf("\nAccount number %d was updated!\n", acnum);
