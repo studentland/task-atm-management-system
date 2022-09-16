@@ -97,6 +97,18 @@ invalid:
     }
 }
 
+// return account type char[] from incoming number
+char *actype(int n)
+{
+    switch (n) {
+        case 1: return "fixed01";
+        case 2: return "fixed02";
+        case 3: return "fixed03";
+        case 4: return "savings";
+        default: return "current";
+    }
+}
+
 void createNewAcc(struct User u)
 {
     struct Record r;
@@ -131,8 +143,11 @@ noAccount:
     scanf("%d", &r.phone);
     printf("\nEnter amount to deposit: $");
     scanf("%lf", &r.amount);
-    printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
-    scanf("%s", r.accountType);
+    // account type
+    printf("\nChoose the type of account:\n\t[0] -> current(also default if the variants below are not chosen)\n\t[1] -> fixed01(for 1 year)\n\t[2] -> fixed02(for 2 years)\n\t[3] -> fixed03(for 3 years)\n\t[4] -> savings\n\n\tEnter your choice:");
+    int rawactype;
+    scanf("%d", &rawactype);
+    strcpy(r.accountType , actype(rawactype));
 
     saveAccountToFile(pf, &u, &r);
 
@@ -174,6 +189,20 @@ void checkAllAccounts(struct User u)
 
 // check existing accounts implementation
 
+void printInterest(char *actype){
+    if (strcmp(actype, "savings") == 0) {
+        printf("savings: interest rate 0.07%%");
+    }else if(strcmp(actype, "fixed03") == 0) {
+        printf("fixed03(3 year account): interest rate 0.08%%");
+    }else if(strcmp(actype, "fixed02") == 0) {
+        printf("fixed02(2 year account): interest rate 0.05%%");
+    }else if(strcmp(actype, "fixed01") == 0) {
+        printf("fixed01(1 year account): interest rate 0.04%%");
+    }else{
+        printf("You will not get interests because the account is of type current");
+    }
+}
+
 void checkExistingAccount(struct User u)
 {
     char userName[100];
@@ -203,11 +232,15 @@ checkMenu:
                    r.amount,
                    r.accountType);
                    acfound = 1;
+                   break;
         }
     }
     if (!acfound) {
     printf("\n\n%s account number %d not found!", u.name, r.accountNbr);
+    }else{
+        printInterest(r.accountType);
     }
+
     fclose(pf);
     success(u);
 }
