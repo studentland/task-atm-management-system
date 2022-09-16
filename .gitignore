@@ -53,6 +53,7 @@ dkms.conf
 
 # executable "atm"
 atm
+omg
 data/users.txt
 data/records.txt
 .DS_Store
