@@ -385,7 +385,7 @@ void updateRecordDataAndMenu(struct Record *r){
 }
 
 void updateLine(FILE *src, FILE *temp, const int line, struct Record *r, struct User u){
-    printf("\n------r.name is %s", u.name);
+    // printf("\n------r.name is %s", u.name);
     
     char buffer[BUFFER_SIZE];
     int count = 1;
@@ -489,6 +489,129 @@ void updateExistingAccount(struct User u){
     success(u);
 }
 
+// make transactions implementation
+
+// get the money from account
+void withdrawFromAccount(struct Record *r){
+    system("clear");
+    again:
+    printf("Account number %d amount $%lf\n\n", r->accountNbr, r->amount);
+    printf("\t\t\t\n\n\nEnter withdrawal amount(min $0 ... max $%f) : $", r->amount);
+    double wantcash;
+    scanf("%lf", &wantcash);
+    // check incoming
+    if (wantcash < 0 || wantcash > r->amount){ //wrong amount request
+        system("clear");
+        printf("Wrong amount!\n\n");
+        goto again;
+    }
+
+    // subtraction
+    double oldamout = r->amount;
+    r->amount -= wantcash;
+    // onforming
+    printf("Old amount: $%lf\nWithdrawn amount: $%lf\nNew amount: $%lf\n", oldamout, wantcash, r->amount);
+}
+
+// put the money into account
+void depositToAccount(struct Record *r){
+    system("clear");
+    again:
+    printf("Account number %d amount $%lf\n\n", r->accountNbr, r->amount);
+    double maxgive = 10000; // incoming restriction for one request
+    printf("\t\t\t\n\n\nEnter the deposited amount(min $0 ... max $%f) : $", maxgive);
+    double wantgive;
+    scanf("%lf", &wantgive);
+    // check incoming
+    if (wantgive < 0 || wantgive > maxgive){ //wrong amount request
+        system("clear");
+        printf("Wrong amount!\n\n");
+        goto again;
+    }
+
+    // summation
+    double oldamout = r->amount;
+    r->amount += wantgive;
+    // onforming
+    printf("Old amount: $%lf\nDeposited amount: $%lf\nNew amount: $%lf\n", oldamout, wantgive, r->amount);
+}
+
+// menu for transaction account data
+void transactionRecordDataAndMenu(struct Record *r){
+    int option = 0;
+    system("clear");
+    printf("\t\t====== %s make transactions for account number %d =====\n\n[0] exit\n\n[1] withdraw money\n\n[2] deposit money\n\n",
+     r->name,
+     r->accountNbr);
+    scanf("%d",&option);
+    if (option < 0 && option > 2){
+        transactionRecordDataAndMenu(r);
+    }else{
+        switch (option)
+        {
+        case 1:
+            withdrawFromAccount(r);
+            break;
+        case 2:
+            depositToAccount(r);
+            break;
+
+        default:
+            break;
+        }
+    }
+}
+
+// transactions with existing account upper level function
+void makeTransactionsWithExistingAccount(struct User u){
+    int acnum = 0;
+    int strnum = 0;
+    int acfound = 0;
+    char userName[100];
+    struct Record r;
+
+    FILE *pf = fopen(RECORDS, "r");
+
+    system("clear");
+    printf("\t\t====== %s, enter your account number to make transactions =====\n\n", u.name);
+    scanf("%d",&acnum);
+
+
+    while (getAccountFromFile(pf, userName, &r))
+    {
+        strnum++;
+        if (strcmp(userName, u.name) == 0 && r.accountNbr == acnum)
+        {
+            // printf("acnum %d r.accountNbr %d strnum %d\n", acnum, r.accountNbr, strnum);
+            printf("_____________________\n");
+            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n\n",
+                   r.accountNbr,
+                   r.deposit.day,
+                   r.deposit.month,
+                   r.deposit.year,
+                   r.country,
+                   r.phone,
+                   r.amount,
+                   r.accountType);
+            acfound = 1;
+            break;
+        }
+    }
+    fclose(pf);
+    if (acfound){
+        int rp = r.phone;
+        char rc[100];
+        strcpy(rc, r.country);
+
+        transactionRecordDataAndMenu(&r);
+        
+        updateAccount(strnum*2-1, r, u); // to update account data
+        printf("\nTransaction completed!\nAccount number %d was updated!\n", acnum);
+    }else{
+        printf("\nAccount number %d was not found!\n", acnum);
+    }
+    success(u);
+}
 
 
 // https://www.tutorialspoint.com/c-program-to-remove-a-line-from-the-file#
