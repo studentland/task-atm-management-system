@@ -115,7 +115,8 @@ void createNewAcc(struct User u)
     struct Record cr;
     char userName[50];
     FILE *pf = fopen(RECORDS, "a+");
-
+// fix of id generator, which no needed because the name is the unique key, and we not use databases
+r.id = 11; // just a gap to polish how the records look in file, because no need id without databases
 int freshRun = 1; // to fix appearing account report on screen
 noAccount:
     if (freshRun) { system("clear"); freshRun = 0; }
