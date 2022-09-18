@@ -120,7 +120,7 @@ r.id = 11; // just a gap to polish how the records look in file, because no need
 int freshRun = 1; // to fix appearing account report on screen
 noAccount:
     if (freshRun) { system("clear"); freshRun = 0; }
-    printf("\t\t\t===== New record =====\n");
+    printf("\t\t\t===== New record =====\n\t\t\t==DO_NOT_USE_SPACES!==\n");
 
     printf("\nEnter today's date(mm/dd/yyyy):");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
@@ -138,9 +138,9 @@ noAccount:
             goto noAccount;
         }
     }
-    printf("\nEnter the country:");
+    printf("\nEnter the country: ");
     scanf("%s", r.country);
-    printf("\nEnter the phone number:");
+    printf("\nEnter the phone number: ");
     scanf("%d", &r.phone);
     printf("\nEnter amount to deposit: $");
     scanf("%lf", &r.amount);
@@ -170,7 +170,7 @@ void checkAllAccounts(struct User u)
         if (strcmp(userName, u.name) == 0)
         {
             printf("_____________________\n");
-            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n",
+            printf("\nAccount number:%d\nDeposit Date: %d/%d/%d \ncountry: %s \nPhone number: %d \nAmount deposited: $%.2f \nType Of Account: %s\n",
                    r.accountNbr,
                    r.deposit.day,
                    r.deposit.month,
@@ -223,7 +223,7 @@ checkMenu:
         if (strcmp(userName, u.name) == 0 && r.accountNbr == acnum)
         {
             printf("_____________________\n");
-            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n",
+            printf("\nAccount number: %d\nDeposit Date: %d/%d/%d \ncountry: %s \nPhone number: %d \nAmount deposited: $%.2f \nType Of Account: %s\n",
                    r.accountNbr,
                    r.deposit.day,
                    r.deposit.month,
@@ -301,7 +301,7 @@ void removeExistingAccount(struct User u){
         {
             // printf("acnum %d r.accountNbr %d strnum %d\n", acnum, r.accountNbr, strnum);
             printf("_____________________\n");
-            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n\n",
+            printf("\nAccount number: %d\nDeposit Date: %d/%d/%d \ncountry: %s \nPhone number: %d \nAmount deposited: $%.2f \nType Of Account: %s\n\n",
                    r.accountNbr,
                    r.deposit.day,
                    r.deposit.month,
@@ -332,11 +332,9 @@ void removeExistingAccount(struct User u){
 // update country
 void updateCountry(struct Record *r){
     againNewCountry:
-    printf("\t\t\t\n\n\nEnter new country: ");
+    printf("\t\t\t\n\n\nEnter new country(NO_SPACES): ");
     char newcountry[100];
     scanf("%s",newcountry);
-    printf("\nbefore updateCountry newcountry %s", newcountry);
-    printf("\nbefore updateCountry r.country %s", r->country);
     if (strcmp(newcountry, "") == 0 || newcountry[0] == ' '){
         system("clear");
         printf("\nEmpty country and space at beginning are not allowed");
@@ -344,15 +342,13 @@ void updateCountry(struct Record *r){
     }else{
         strcpy(r->country, newcountry);
     }
-    printf("\nafter updateCountry r.country %s", r->country);
 }
 
 // update phone
 void updatePhone(struct Record *r){
-    printf("Enter new phone number: ");
+    printf("Enter new phone number(NO_SPACES): ");
     int newphone = 0;
     scanf("%d", &newphone);
-    printf("\n+++++++++after scanf %d", newphone);
     if (newphone){
         r->phone = newphone;
     }
@@ -458,7 +454,7 @@ void updateExistingAccount(struct User u){
         {
             // printf("acnum %d r.accountNbr %d strnum %d\n", acnum, r.accountNbr, strnum);
             printf("_____________________\n");
-            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n\n",
+            printf("\nAccount number: %d\nDeposit Date: %d/%d/%d \ncountry: %s\nPhone number: %d\nAmount deposited: $%.2f\nType Of Account: %s\n\n",
                    r.accountNbr,
                    r.deposit.day,
                    r.deposit.month,
@@ -478,8 +474,8 @@ void updateExistingAccount(struct User u){
         strcpy(rc, r.country);
 
         updateRecordDataAndMenu(&r);
-        printf("\nold data: phone %d , country %s", rp, rc);
-        printf("\nnew data: phone %d , country %s", r.phone, r.country);
+        printf("\nOld ... phone: %d | country: %s", rp, rc);
+        printf("\nNew ... phone: %d | country: %s", r.phone, r.country);
 
         updateAccount(strnum*2-1, r, u); // to update account data
         printf("\nAccount number %d was updated!\n", acnum);
@@ -584,7 +580,7 @@ void makeTransactionsWithExistingAccount(struct User u){
         {
             // printf("acnum %d r.accountNbr %d strnum %d\n", acnum, r.accountNbr, strnum);
             printf("_____________________\n");
-            printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n\n",
+            printf("\nAccount number: %d\nDeposit Date: %d/%d/%d \ncountry: %s \nPhone number: %d \nAmount deposited: $%.2f \nType Of Account: %s\n\n",
                    r.accountNbr,
                    r.deposit.day,
                    r.deposit.month,
@@ -613,50 +609,8 @@ void makeTransactionsWithExistingAccount(struct User u){
     success(u);
 }
 
-
 // https://www.tutorialspoint.com/c-program-to-remove-a-line-from-the-file#
 
-int rawmain(){
-   FILE *src;
-   FILE *temp;
-   char ch;
-   char path[100];
-   int line;
-   src=fopen("cprogramming.txt","w");
-   printf("enter the text.press cntrl Z:\n");
-   while((ch = getchar())!=EOF){
-      putc(ch,src);
-   }
-   fclose(src);
-   printf("Enter file path: ");
-   scanf("%s", path);
-   printf("Enter line number to remove: ");
-   scanf("%d", &line);
-   src = fopen(path, "r");
-   temp = fopen("delete.tmp", "w");
-   if (src == NULL || temp == NULL){
-      printf("Unable to open file.\n");
-      exit(EXIT_FAILURE);
-   }
-   printf("\nFile contents before removing line.\n\n");
-   printFile(src);
-   // Move src file pointer to beginning
-   rewind(src);
-   // Delete given line from file.
-   deleteLine(src, temp, line);
-   /* Close all open files */
-   fclose(src);
-   fclose(temp);
-   /* Delete src file and rename temp file as src */
-   remove(path);
-   rename("delete.tmp", path);
-   printf("\n\n\nFile contents after removing %d line.\n\n", line);
-   // Open source file and print its contents
-   src = fopen(path, "r");
-   printFile(src);
-   fclose(src);
-   return 0;
-}
 void printFile(FILE *fptr){
    char ch;
    while((ch = fgetc(fptr)) != EOF)

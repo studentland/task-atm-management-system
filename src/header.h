@@ -43,3 +43,4 @@ void removeExistingAccount(struct User u);
 void updateExistingAccount(struct User u);
 void checkExistingAccount(struct User u);
 void makeTransactionsWithExistingAccount(struct User u);
+void transferOwnership(struct User u);

@@ -107,7 +107,7 @@ void registerMenu(char a[50], char pass[50])
     system("clear");
     printf("\n\n\n\t\t\t\t   Bank Management System\n");
 registerAgain:
-    printf("\n\t\t\t\t\t Enter new User Login:");
+    printf("\n\t\t\t\t\t Enter new User Login(NO_SPACES): ");
     scanf("%s", a);
 
     if (isUserNameUnique(a)){ // name is unique , can use it
@@ -130,7 +130,7 @@ registerAgain:
         return exit(1);
     }
 
-    printf("\n\n\t\t\t\tEnter the new password:");
+    printf("\n\n\t\t\t\tEnter the new password(NO_SPACES):");
     char pass0[50];
     scanf("%s", pass0);
 
